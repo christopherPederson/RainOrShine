@@ -1,0 +1,111 @@
+:root{
+    font-family: 'Kanit', Arial;
+    margin: 0px;
+    padding: 0px;
+    
+    --blue: rgb(132, 152, 255);
+    --darkBlue: rgb(0, 58, 121);
+    --midBlue: rgb(81, 81, 255);
+    --yellow: rgb(255, 255, 182);
+    --black: black; 
+    --white: white;
+}
+header{
+    width: 100vw;
+    height: 50px;
+
+    position: absolute;
+    top: 0px;
+    left: 0px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    background-color: var(--blue);
+}
+.header__logoWrapper{
+    margin-left: 1vw;
+    margin-right: 1vw;
+    margin-bottom: 5px;
+
+    font-size: 30px;
+    font-family: Agbalumo, Arial;
+
+    color: var(--white);
+    text-decoration: none;
+}
+.header__logo--Rain{
+    color: var(--darkBlue);
+}
+.header__logo--Shine{
+    color: var(--yellow);
+}
+.header__locationSearchBox{
+    height: 30px;
+    width: 20vw;
+
+    padding-left: 10px;
+
+    background-color: var(--white);
+    border-radius: 15px 0 0 15px;
+    border: 2px var(--white) solid;
+}
+.header__locationSearchBtn{
+    height: 30px;
+
+    background-color: var(--white);
+    border-radius: 0 15px 15px 0;
+    border: 2px var(--white) solid;
+
+    
+}
+.header__myLocationBtn{
+    margin-left: 1vw;
+    margin-right: 1vw;
+    height: 30px;
+
+    background-color: var(--white);
+    border-radius: 15px;
+    border: 2px var(--white) solid;
+}
+.headerBtn:hover{
+    cursor:pointer;
+}
+.headerBtn:active{
+    box-shadow: 1px 1px 1px var(--blue) inset;
+}
+.subheader{
+    height: 30px;
+    width:100%;
+
+    position: absolute;
+    top: 50px;
+    left: 0px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    background-color: var(--darkBlue);
+}
+.subheader__textWrapper{
+    width: 95%;
+    height: fit-content;
+
+    font-size: 20px;
+    overflow-x: hidden;
+    text-wrap: nowrap;
+
+    color: var(--white);
+}
+.content{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+.tile{
+    border-radius: 20px;
+    background-color: var(--blue);
+}
