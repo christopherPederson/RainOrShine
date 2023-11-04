@@ -26,3 +26,4 @@ let populateMarquee = (array, itemWrapper, hiddenItemWrapper) => {
         hiddenItemWrapper.innerHTML += `<div class="marquee__item--num${i + 1} marquee__item">${array[i]}</div>`;
         }
 };
+populateMarquee(marqueeArray, marqueeWrapper, hiddenMarqueeWrapper);
