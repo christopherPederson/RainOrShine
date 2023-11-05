@@ -1,19 +1,4 @@
-marqueeArray = ["item with a bit of text 1", 
-                "item with a bit of text 2",
-                "item with a bit of text 3",
-                "item with a bit of text 4",
-                "item with a bit of text 5",
-                "item with a bit of text 6",
-                "item with a bit of text 7",
-                "item with a bit of text 8",
-                "item with a bit of text 9",
-                "item with a bit of text 10",
-                "item with a bit of text 11",
-                "item with a bit of text 12",
-                "item with a bit of text 13",
-                "item with a bit of text 14",
-                "item with a bit of text 15",
-];
+marqueeArray = [];// add your own text to the array Note in future version the array will be auto populated 
 
 let marqueeWrapper = document.querySelector(".marquee__textWrapper");
 let hiddenMarqueeWrapper = document.querySelector(".marquee__textWrapper--hidden");
