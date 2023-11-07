@@ -1,4 +1,4 @@
-marqueeArray = [];// add your own text to the array Note in future version the array will be auto populated 
+marqueeArray = [];// add your own text to the array Note in future version the array will be auto populated and icons will be displayed for cities
 
 let marqueeWrapper = document.querySelector(".marquee__textWrapper");
 let hiddenMarqueeWrapper = document.querySelector(".marquee__textWrapper--hidden");
