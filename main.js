@@ -1,12 +1,12 @@
 
 ///////////////////////////////Dev Notes///////////////////////////////
 // Christopher Pederson-2023
-//This weather app is designed to take advantage of the open-meteo API to 
-//display the weather for a number of cities; features will eventually include
+// this wether app is desighned to take advantage of the open-meteo api to 
+//display the weather for a number of cities, features will eventually inclue
 //a live data stream marquee, data visualization of any supported city, and
-//a search function to find cities with auto-fill features
+//a search function to find cities with auto fill features
 
-// currently nonfunctional, marquee elements need to be loaded to the marquee divs
+// currently non functional, marquee elements need to be loaded to the marquee divs
 ///////////////////////////////Dev Notes///////////////////////////////
 ///////////////////////////////Veriable Decleration///////////////////////////////
 cityNamesArray = [ // City Decleration, number of cities determines the number of marquee items
@@ -31,10 +31,10 @@ let hiddenMarqueeWrapper = document.querySelector(".marquee__textWrapper--hidden
 
 ///////////////////////////////Veriable Decleration///////////////////////////////
 ///////////////////////////////Function Decleration///////////////////////////////
-let serverNotResponding = () => {
+let serverNotResponding = (string) => {
 // this function is called when the server does not respond to the fetch request
 // it will trigger the server not responding re direct
-console.log("server not responding")
+console.log(`server not responding while ${string}`)
 }
 let populateCityCoordinates = (_cityNamesArray, _cityLatitudeArray, _cityLongitudeArray) => {
 // this function populates the city coordinates arrays with the corresponding city coordinates 
@@ -61,9 +61,8 @@ let populateCityCoordinates = (_cityNamesArray, _cityLatitudeArray, _cityLongitu
             
             }, (error) => {
                 //failed fetch
-                console.log(error)
                 //call server not responding function
-                serverNotResponding();
+                serverNotResponding("populating city coordinates");
             })
     }
 }
@@ -107,9 +106,10 @@ let getCodeData = (_cityNamesArray, _cityCodeArray, _cityLatitudeArray, _cityLon
                 _cityCodeArray[i] = data.hourly.weather_code[12];
 
             }).catch(() => {
-                serverNotResponding();
 
-            })
+                serverNotResponding("get code data");
+
+            });
     }
 };
 let constructMarqueeStrings = (_cityNamesArray, _cityCodeArray, _marqueeArray) => {
