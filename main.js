@@ -1,11 +1,12 @@
+
 ///////////////////////////////Dev Notes///////////////////////////////
 // Christopher Pederson-2023
-// this wether app is desighned to take advantage of the open-meteo api to 
-//display the weather for a number of cities, features will eventually inclue
+//This weather app is designed to take advantage of the open-meteo API to 
+//display the weather for a number of cities; features will eventually include
 //a live data stream marquee, data visualization of any supported city, and
-//a search function to find cities with auto fill features
+//a search function to find cities with auto-fill features
 
-// currently non functional, marquee elements need to be loaded to the marquee divs
+// currently nonfunctional, marquee elements need to be loaded to the marquee divs
 ///////////////////////////////Dev Notes///////////////////////////////
 ///////////////////////////////Veriable Decleration///////////////////////////////
 cityNamesArray = [ // City Decleration, number of cities determines the number of marquee items
@@ -16,7 +17,7 @@ cityNamesArray = [ // City Decleration, number of cities determines the number o
     "calgary",
     "edmonton",
     "winnipeg",
-    "waterloo",
+    "kitchener",
     "halifax",
     "saskatoon",
 ]
@@ -30,7 +31,11 @@ let hiddenMarqueeWrapper = document.querySelector(".marquee__textWrapper--hidden
 
 ///////////////////////////////Veriable Decleration///////////////////////////////
 ///////////////////////////////Function Decleration///////////////////////////////
-
+let serverNotResponding = () => {
+// this function is called when the server does not respond to the fetch request
+// it will trigger the server not responding re direct
+console.log("server not responding")
+}
 let populateCityCoordinates = (_cityNamesArray, _cityLatitudeArray, _cityLongitudeArray) => {
 // this function populates the city coordinates arrays with the corresponding city coordinates 
 //retrieved from the api using the getCityCoordinatesData function
@@ -38,39 +43,51 @@ let populateCityCoordinates = (_cityNamesArray, _cityLatitudeArray, _cityLongitu
     for(let i = 0; i < _cityNamesArray.length; i++){
         //loop through the city names array and call the getCityCoordinatesData function for each city
 
-        getCityCoordinatesData(_cityNamesArray, i).then((data) => {
-            //succesful fetch
-
-            //test to see if the server responded with a valid city ie inside canada if not we will use the default city
-        }, (error) => {
-            //failed fetch
-            console.log(error)
-            //call server not responding function
-        })
+        getCityCoordinatesData(_cityNamesArray[i])
+            .then((data) => {
+                //succesful fetch
+                //test to see if the server responded with a valid city ie inside canada if not we will use the default city
+                if(data.results[0].country_code === "CA"){
+                    //if the server responded with a valid city we will populate the city coordinates arrays
+                    _cityLatitudeArray[i] = data.results[0].latitude;
+                    _cityLongitudeArray[i] = data.results[0].longitude;
+                }else{
+                    //if the server responded with an invalid city we will populate the city coordinates arrays with the default city
+                    console.log(`invalid city name: ${_cityNamesArray[i]}`)
+                    _cityLatitudeArray[i] = 45.41117;
+                    _cityLongitudeArray[i] = -75.69812;
+                    // coordinates for ottawa city
+                }
+            
+            }, (error) => {
+                //failed fetch
+                console.log(error)
+                //call server not responding function
+                serverNotResponding();
+            })
     }
 }
-let getCityCoordinatesData = (_cityNamesArray, i) => {
-// returns the raw json data from the api for the corresponding city name
-// the data is then used to populate the city coordinates arrays
-// the function is desighned to be used while iterating through the city names array
+let getCityCoordinatesData = (_cityName) => {
+    // returns the raw json data from the api for the corresponding city name
+    // the data is then used to populate the city coordinates arrays
+    // the function is designed to be used while iterating through the city names array
     return new Promise((resolve, reject) => {
+        fetch(
+            `https://geocoding-api.open-meteo.com/v1/search?name=${_cityName}&count=1&language=en&format=json`
+        )
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
 
-        fetch(`https://geocoding-api.open-meteo.com/v1/search?name=
-        ${_cityNamesArray[i]}&count=1&language=en&format=json`)
-        .then((response) => {
+                resolve(data);
+            })
+            .catch(() => {
 
-            return response.json();
-
-        }).then((data) => {
-
-            resolve(data)
-
-        }).catch(() => {
-
-            reject(error)
-            
-        })
-    })
+                reject("Server not responding");
+                
+            });
+    });
 };
 let getCodeData = (_cityNamesArray, _cityCodeArray, _cityLatitudeArray, _cityLongitudeArray) => {
 // this function populates the city code array with the corresponding city codes for each city string
@@ -80,17 +97,19 @@ let getCodeData = (_cityNamesArray, _cityCodeArray, _cityLatitudeArray, _cityLon
         fetch(`https://api.open-meteo.com/v1/forecast?
             latitude=${_cityLatitudeArray[i]}
             longitude=${_cityLongitudeArray[i]}
-            &hourly=weather_code&forecast_days=1`
+            &hourly=weather_code&forecast_days=1`)
 
-        ).then((response) => {
+            .then((response) => {
 
-            return response.json();
+                return response.json();
 
-        }).then((data) => {
+            }).then((data) => {
+                _cityCodeArray[i] = data.hourly.weather_code[12];
 
-            _cityCodeArray[i] = data.hourly.weather_code[12];
+            }).catch(() => {
+                serverNotResponding();
 
-        })
+            })
     }
 };
 let constructMarqueeStrings = (_cityNamesArray, _cityCodeArray, _marqueeArray) => {
@@ -167,6 +186,7 @@ let populateMarquee = (array, itemWrapper, hiddenItemWrapper) => {
 
 populateCityCoordinates(cityNamesArray, cityLatitudeArray, cityLongitudeArray);
 getCodeData(cityNamesArray, cityCodeArray, cityLatitudeArray, cityLongitudeArray);
+console.log(cityCodeArray);
 populateMarquee(marqueeArray, marqueeWrapper, hiddenMarqueeWrapper);
 
 ///////////////////////////////Function Calls///////////////////////////////
