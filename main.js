@@ -9,32 +9,13 @@
 // currently non functional, marquee elements need to be loaded to the marquee divs
 ///////////////////////////////Dev Notes///////////////////////////////
 ///////////////////////////////Veriable Decleration///////////////////////////////
-cityNamesArray = [ // City Decleration, number of cities determines the number of marquee items
-    "montreal",
-    "toronto",
-    "vancouver",
-    "ottawa",
-    "calgary",
-    "edmonton",
-    "winnipeg",
-    "kitchener",
-    "halifax",
-    "saskatoon",
-]
-marqueeArray = new Array(cityNamesArray.length)//array to hold the marquee strings
-cityCodeArray = new Array(cityNamesArray.length)//array to hold the city codes specific codes are used to determine the weather symbol
-cityLongitudeArray = new Array(cityNamesArray.length)//array to hold the corresponding city longitudes
-cityLatitudeArray = new Array(cityNamesArray.length)//array to hold the corresponding city latitudes
-
-let marqueeWrapper = document.querySelector(".marquee__textWrapper");// visible marquee wrapper
-let hiddenMarqueeWrapper = document.querySelector(".marquee__textWrapper--hidden"); //hidden marquee wrapper, this acts as the second half of the marquee length to facillitate the scroling effect
 
 ///////////////////////////////Veriable Decleration///////////////////////////////
 ///////////////////////////////Function Decleration///////////////////////////////
 let serverNotResponding = (string) => {
 // this function is called when the server does not respond to the fetch request
 // it will trigger the server not responding re direct
-console.log(`server not responding while ${string}`)
+console.log(`server not responding while ${string} excecuted`)
 }
 let populateCityCoordinates = (_cityNamesArray, _cityLatitudeArray, _cityLongitudeArray) => {
 // this function populates the city coordinates arrays with the corresponding city coordinates 
@@ -92,6 +73,11 @@ let getCodeData = (_cityNamesArray, _cityCodeArray, _cityLatitudeArray, _cityLon
 // this function populates the city code array with the corresponding city codes for each city string
 // this function is reliant on the latitude and longitude arrays being populated first
     for(let i = 0; i < _cityNamesArray.length; i++){
+
+        console.log(`https://api.open-meteo.com/v1/forecast?
+        latitude=${_cityLatitudeArray[i]}
+        longitude=${_cityLongitudeArray[i]}
+        &hourly=weather_code&forecast_days=1`)
 
         fetch(`https://api.open-meteo.com/v1/forecast?
             latitude=${_cityLatitudeArray[i]}
@@ -180,13 +166,36 @@ let populateMarquee = (array, itemWrapper, hiddenItemWrapper) => {
         hiddenItemWrapper.innerHTML += `<div class="marquee__item--num${i + 1} marquee__item">${array[i]}</div>`;
         }
 };
+let marqueeMasterCall = () => {
+    // this function is the master function that calls all the other functions in the correct order
+    // it is designed to be called on page load
 
+    cityNamesArray = [ // City Decleration, number of cities determines the number of marquee items
+        "montreal",
+        "toronto",
+        "vancouver",
+        "ottawa",
+        "calgary",
+        "edmonton",
+        "winnipeg",
+        "kitchener",
+        "halifax",
+        "saskatoon",
+    ]
+    marqueeArray = new Array(cityNamesArray.length)//array to hold the marquee strings
+    cityCodeArray = new Array(cityNamesArray.length)//array to hold the city codes specific codes are used to determine the weather symbol
+    cityLongitudeArray = new Array(cityNamesArray.length)//array to hold the corresponding city longitudes
+    cityLatitudeArray = new Array(cityNamesArray.length)//array to hold the corresponding city latitudes
+
+    let marqueeWrapper = document.querySelector(".marquee__textWrapper");// visible marquee wrapper
+    let hiddenMarqueeWrapper = document.querySelector(".marquee__textWrapper--hidden"); //hidden marquee wrapper, this acts as the second half of the marquee length to facillitate the scroling effect
+
+    populateCityCoordinates(cityNamesArray, cityLatitudeArray, cityLongitudeArray);
+    getCodeData(cityNamesArray, cityCodeArray, cityLatitudeArray, cityLongitudeArray);
+    constructMarqueeStrings(cityNamesArray, cityCodeArray, marqueeArray); 
+};
 ///////////////////////////////Function Decleration///////////////////////////////
 ///////////////////////////////Function Calls///////////////////////////////
 
-populateCityCoordinates(cityNamesArray, cityLatitudeArray, cityLongitudeArray);
-getCodeData(cityNamesArray, cityCodeArray, cityLatitudeArray, cityLongitudeArray);
-console.log(cityCodeArray);
-populateMarquee(marqueeArray, marqueeWrapper, hiddenMarqueeWrapper);
 
 ///////////////////////////////Function Calls///////////////////////////////
