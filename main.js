@@ -1,7 +1,7 @@
 
 ///////////////////////////////Dev Notes///////////////////////////////
-// Christopher Pederson-2023
-// this wether app is desighned to take advantage of the open-meteo api to 
+//Christopher Pederson-2023
+//This weather app is designed to take advantage of the open-meteo api to 
 //display the weather for a number of cities, features will eventually inclue
 //a live data stream marquee, data visualization of any supported city, and
 //a search function to find cities with auto fill features
